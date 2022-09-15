@@ -68,7 +68,8 @@ class ToolbarRow extends Component {
 
   updateButtonGroups() {
     const panelModules = extensionManager.modules[MODULE_TYPES.PANEL];
-
+    console.log('Panel');
+    console.log(panelModules);
     this.buttonGroups = {
       left: [],
       right: [],
@@ -92,13 +93,25 @@ class ToolbarRow extends Component {
           menuOption.isDisabled(this.props.studies, this.props.activeViewport);
 
         if (hasActiveContext && !isDisabled) {
-          const menuOptionEntry = {
-            value: menuOption.target,
-            icon: menuOption.icon,
-            bottomLabel: menuOption.label,
-            badgeNumber: menuOption.badgeNumber,
-            stateEvent: menuOption.stateEvent,
-          };
+          if (menuOption.label == 'Measurements') {
+            console.log(menuOption.label);
+            const menuOptionEntry = {
+              value: menuOption.target,
+              icon: menuOption.icon,
+              bottomLabel: menuOption.label,
+              badgeNumber: menuOption.badgeNumber,
+              stateEvent: menuOption.stateEvent,
+            };
+          } else {
+            const menuOptionEntry = {
+              value: menuOption.target,
+              icon: menuOption.icon,
+              bottomLabel: menuOption.label,
+              badgeNumber: menuOption.badgeNumber,
+              stateEvent: menuOption.stateEvent,
+            };
+          }
+
           const from = menuOption.from || 'right';
 
           this.buttonGroups[from].push(menuOptionEntry);
