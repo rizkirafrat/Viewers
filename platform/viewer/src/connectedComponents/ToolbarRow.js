@@ -94,8 +94,7 @@ class ToolbarRow extends Component {
 
         if (hasActiveContext && !isDisabled) {
           if (menuOption.label == 'Measurements') {
-            console.log(menuOption.label);
-            const menuOptionEntry = {
+            var menuOptionEntry = {
               value: menuOption.target,
               icon: menuOption.icon,
               bottomLabel: menuOption.label,
@@ -103,7 +102,7 @@ class ToolbarRow extends Component {
               stateEvent: menuOption.stateEvent,
             };
           } else {
-            const menuOptionEntry = {
+            var menuOptionEntry = {
               value: menuOption.target,
               icon: menuOption.icon,
               bottomLabel: menuOption.label,
@@ -118,6 +117,8 @@ class ToolbarRow extends Component {
         }
       });
     });
+
+    console.log(this.buttonGroups);
 
     // TODO: This should come from extensions, instead of being baked in
     this.buttonGroups.left.unshift({
