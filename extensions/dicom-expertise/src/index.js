@@ -5,14 +5,18 @@ import init from './init.js';
 import toolbarModule from './toolbarModule.js';
 import getSopClassHandlerModule from './getOHIFDicomSegSopClassHandler.js';
 import SegmentationPanel from './components/SegmentationPanel/SegmentationPanel.js';
-import { version } from '../package.json';
-const { studyMetadataManager } = OHIF.utils;
+import {
+  version
+} from '../package.json';
+const {
+  studyMetadataManager
+} = OHIF.utils;
 
 export default {
   /**
    * Only required property. Should be a unique value across all extensions.
    */
-  id: 'com.ohif.dicom-segmentation',
+  id: 'com.ohif.dicom-expertise',
   version,
 
   /**
@@ -21,20 +25,34 @@ export default {
    * @param {object} [configuration={}]
    * @param {object|array} [configuration.csToolsConfig] - Passed directly to `initCornerstoneTools`
    */
-  preRegistration({ servicesManager, configuration = {} }) {
+  preRegistration({
+    servicesManager,
+    configuration = {}
+  }) {
     init({
       servicesManager,
       configuration,
     });
   },
-  getToolbarModule({ servicesManager }) {
+  getToolbarModule({
+    servicesManager
+  }) {
     return toolbarModule;
   },
-  getPanelModule({ commandsManager, api, servicesManager }) {
-    const { UINotificationService, LoggerService } = servicesManager.services;
+  getPanelModule({
+    commandsManager,
+    api,
+    servicesManager
+  }) {
+    const {
+      UINotificationService,
+      LoggerService
+    } = servicesManager.services;
 
     const ExtendedSegmentationPanel = props => {
-      const { activeContexts } = api.hooks.useAppContext();
+      const {
+        activeContexts
+      } = api.hooks.useAppContext();
 
       const onDisplaySetLoadFailureHandler = error => {
         LoggerService.error({
@@ -74,16 +92,31 @@ export default {
         commandsManager.runCommand('requestNewSegmentation');
       };
 
-      return (
-        <SegmentationPanel
-          {...props}
-          activeContexts={activeContexts}
-          contexts={api.contexts}
-          onSegmentItemClick={segmentItemClickHandler}
-          onSegmentVisibilityChange={onSegmentVisibilityChangeHandler}
-          onConfigurationChange={onConfigurationChangeHandler}
-          onSelectedSegmentationChange={onSelectedSegmentationChangeHandler}
-          onDisplaySetLoadFailure={onDisplaySetLoadFailureHandler}
+      return ( <
+        SegmentationPanel {
+          ...props
+        }
+        activeContexts = {
+          activeContexts
+        }
+        contexts = {
+          api.contexts
+        }
+        onSegmentItemClick = {
+          segmentItemClickHandler
+        }
+        onSegmentVisibilityChange = {
+          onSegmentVisibilityChangeHandler
+        }
+        onConfigurationChange = {
+          onConfigurationChangeHandler
+        }
+        onSelectedSegmentationChange = {
+          onSelectedSegmentationChangeHandler
+        }
+        onDisplaySetLoadFailure = {
+          onDisplaySetLoadFailureHandler
+        }
         />
       );
     };
@@ -105,8 +138,13 @@ export default {
       document.dispatchEvent(event);
     };
 
-    const onSegmentationsLoaded = ({ detail }) => {
-      const { segDisplaySet, segMetadata } = detail;
+    const onSegmentationsLoaded = ({
+      detail
+    }) => {
+      const {
+        segDisplaySet,
+        segMetadata
+      } = detail;
       const studyMetadata = studyMetadataManager.get(
         segDisplaySet.StudyInstanceUID
       );
@@ -126,58 +164,53 @@ export default {
     );
 
     return {
-      menuOptions: [
-        {
-          icon: 'list',
-          label: 'Segmentations',
-          target: 'segmentation-panel',
-          stateEvent: SegmentationPanelTabUpdatedEvent,
-          isDisabled: (studies, activeViewport) => {
-            if (!studies) {
-              return true;
-            }
+      menuOptions: [{
+        icon: 'list',
+        label: 'Segmentations',
+        target: 'segmentation-panel',
+        stateEvent: SegmentationPanelTabUpdatedEvent,
+        isDisabled: (studies, activeViewport) => {
+          if (!studies) {
+            return true;
+          }
 
-            for (let i = 0; i < studies.length; i++) {
-              const study = studies[i];
+          for (let i = 0; i < studies.length; i++) {
+            const study = studies[i];
 
-              if (study && study.series) {
-                for (let j = 0; j < study.series.length; j++) {
-                  const series = study.series[j];
+            if (study && study.series) {
+              for (let j = 0; j < study.series.length; j++) {
+                const series = study.series[j];
 
-                  if (series.Modality === 'SEG') {
-                    if (activeViewport) {
-                      const studyMetadata = studyMetadataManager.get(
-                        activeViewport.StudyInstanceUID
-                      );
-                      if (!studyMetadata) {
-                        return;
-                      }
-                      const referencedDS = studyMetadata.getDerivedDatasets({
-                        referencedSeriesInstanceUID:
-                          activeViewport.SeriesInstanceUID,
-                        Modality: 'SEG',
-                      });
-                      triggerSegmentationPanelTabUpdatedEvent({
-                        badgeNumber: referencedDS.length,
-                        target: 'segmentation-panel',
-                      });
+                if (series.Modality === 'SEG') {
+                  if (activeViewport) {
+                    const studyMetadata = studyMetadataManager.get(
+                      activeViewport.StudyInstanceUID
+                    );
+                    if (!studyMetadata) {
+                      return;
                     }
-                    return false;
+                    const referencedDS = studyMetadata.getDerivedDatasets({
+                      referencedSeriesInstanceUID: activeViewport.SeriesInstanceUID,
+                      Modality: 'SEG',
+                    });
+                    triggerSegmentationPanelTabUpdatedEvent({
+                      badgeNumber: referencedDS.length,
+                      target: 'segmentation-panel',
+                    });
                   }
+                  return false;
                 }
               }
             }
+          }
 
-            return true;
-          },
+          return true;
         },
-      ],
-      components: [
-        {
-          id: 'segmentation-panel',
-          component: ExtendedSegmentationPanel,
-        },
-      ],
+      }, ],
+      components: [{
+        id: 'segmentation-panel',
+        component: ExtendedSegmentationPanel,
+      }, ],
       defaultContext: ['VIEWER'],
     };
   },

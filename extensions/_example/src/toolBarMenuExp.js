@@ -6,7 +6,7 @@ const TOOLBAR_BUTTON_TYPES = {
 
 const definitions = [{
   id: 'SegDropdown',
-  label: 'Expertise',
+  label: 'Segmentation',
   icon: 'ellipse-circle',
   buttons: [{
       id: 'Brush',

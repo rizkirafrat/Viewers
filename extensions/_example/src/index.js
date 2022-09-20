@@ -1,3 +1,5 @@
+import toolBarMenuExp from './toolBarMenuExp.js';
+
 /**
  *
  */
@@ -5,7 +7,7 @@ export default {
   /**
    * Only required property. Should be a unique value across all extensions.
    */
-  id: 'example-extension',
+  id: 'form-expertise',
 
   /**
    * LIFECYCLE HOOKS
@@ -31,9 +33,21 @@ export default {
     return panelModule;
   },
   getToolbarModule() {
-    return panelModule;
+    return {
+      definitions: [{
+        id: 'StackScroll',
+        label: 'Stack Scroll',
+        icon: 'bars',
+        type: 'setToolActive',
+        commandName: 'setToolActive',
+        commandOptions: {
+          toolName: 'StackScroll'
+        },
+      }, ],
+      defaultContext: ['ROUTE:VIEWER'],
+    };
   },
-  getCommandsModule(/* store */) {
+  getCommandsModule( /* store */ ) {
     return commandsModule;
   },
 };
@@ -44,7 +58,10 @@ export default {
 const commandsModule = {
   actions: {
     // Store Contexts + Options
-    exampleAction: ({ viewports, param1 }) => {
+    exampleAction: ({
+      viewports,
+      param1
+    }) => {
       console.log(`There are ${viewports.length} viewports`);
       console.log(`param1's value is: ${param1}`);
     },
@@ -53,7 +70,9 @@ const commandsModule = {
     exampleActionDef: {
       commandFn: this.actions.exampleAction,
       storeContexts: ['viewports'],
-      options: { param1: 'hello world' },
+      options: {
+        param1: 'hello world',
+      },
     },
   },
 };
@@ -92,21 +111,16 @@ const sopClassHandlerModule = {
  *
  */
 const panelModule = {
-  menuOptions: [
-    {
-      icon: 'th-list',
-      label: 'Segments',
-      target: 'segment-panel',
-      isDisabled: studies => {
-        return false;
-      },
+  menuOptions: [{
+    icon: 'th-list',
+    label: 'Segments',
+    target: 'segment-panel',
+    isDisabled: studies => {
+      return false;
     },
-  ],
-  components: [
-    {
-      id: 'segment-panel',
-      component: '... react component ...',
-    },
-  ],
-  defaultContext: ['VIEWER'],
+  }, ],
+  components: [{
+    id: 'segment-panel',
+    component: '... react component ...',
+  }, ],
 };

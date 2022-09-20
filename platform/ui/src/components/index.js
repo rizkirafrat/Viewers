@@ -16,6 +16,8 @@ import { SelectTree } from './selectTree';
 import { SimpleDialog } from './simpleDialog';
 import { OHIFModal } from './ohifModal';
 import { ContextMenu } from './contextMenu';
+import { ExpertiseForm } from './expertiseForm';
+
 import ErrorPage from './errorPage';
 import {
   PageToolbar,
@@ -36,6 +38,7 @@ export {
   LayoutButton,
   LayoutChooser,
   MeasurementTable,
+  ExpertiseForm,
   MeasurementTableItem,
   Overlay,
   OverlayTrigger,
@@ -59,5 +62,5 @@ export {
   Tooltip,
   AboutContent,
   OHIFModal,
-  ErrorPage
+  ErrorPage,
 };

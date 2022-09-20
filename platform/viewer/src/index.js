@@ -29,10 +29,15 @@ import OHIFDicomSegmentationExtension from '@ohif/extension-dicom-segmentation';
 import OHIFDicomRtExtension from '@ohif/extension-dicom-rt';
 import OHIFDicomMicroscopyExtension from '@ohif/extension-dicom-microscopy';
 import OHIFDicomPDFExtension from '@ohif/extension-dicom-pdf';
+import OHIFDicomExpertiseExtension from '@ohif/extension-dicom-segmentation';
+
+// import formExpertise from '/extensions/form-expertise';
 //import OHIFDicomTagBrowserExtension from '@ohif/extension-dicom-tag-browser';
 // Add this for Debugging purposes:
 //import OHIFDebuggingExtension from '@ohif/extension-debugging';
-import { version } from '../package.json';
+import {
+  version
+} from '../package.json';
 
 /*
  * Default Settings
@@ -53,6 +58,9 @@ const appProps = {
     OHIFDicomPDFExtension,
     OHIFDicomSegmentationExtension,
     OHIFDicomRtExtension,
+    OHIFDicomPDFExtension,
+    OHIFDicomExpertiseExtension,
+
     //OHIFDebuggingExtension,
     //OHIFDicomTagBrowserExtension,
   ],
