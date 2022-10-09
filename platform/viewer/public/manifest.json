@@ -1,7 +1,7 @@
 {
-  "name": "OHIF Viewer",
-  "short_name": "Viewer",
-  "description": "OHIF Viewer",
+  "name": "EVOPACS",
+  "short_name": "EVOPACS",
+  "description": "EVOPACS",
   "dir": "auto",
   "lang": "en-US",
   "orientation": "any",

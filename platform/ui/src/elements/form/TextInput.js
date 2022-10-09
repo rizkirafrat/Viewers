@@ -9,13 +9,11 @@ class TextInput extends React.Component {
   }
 
   static propTypes = {
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number
-    ]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     id: PropTypes.string,
     label: PropTypes.string,
     type: PropTypes.string,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -26,15 +24,23 @@ class TextInput extends React.Component {
   };
 
   render() {
+    var classText = 'form-control input-ohif ';
+    if (this.props.disabled) {
+      classText += 'disabled-text';
+    }
+
     return (
       <div className="input-ohif-container">
         {this.props.label && (
-          <label className="input-ohif-label" htmlFor={this.props.id}>{this.props.label}</label>
+          <label className="input-ohif-label" htmlFor={this.props.id}>
+            {this.props.label}
+          </label>
         )}
         <input
           type={this.props.type}
           id={this.props.id}
-          className="form-control input-ohif"
+          disabled={this.props.disabled}
+          className={classText}
           {...this.props}
         />
       </div>

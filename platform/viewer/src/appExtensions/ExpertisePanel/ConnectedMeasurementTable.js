@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { ExpertiseForm } from '@ohif/ui';
 import OHIF, { DICOMSR } from '@ohif/core';
 import moment from 'moment';
@@ -217,6 +218,7 @@ function convertTimepointsToTableData(timepoints) {
  * @returns {undefined|Function}
  */
 function getSaveFunction(serverType) {
+  console.log(serverType);
   if (serverType === 'dicomWeb') {
     return () => {
       const measurementApi = OHIF.measurements.MeasurementApi.Instance;
@@ -269,11 +271,35 @@ function getDataTemplateExpertise() {
   // }
 }
 
+async function postData(url = '', data = {}) {
+  var form_data = new FormData();
+  for (var key in data) {
+    form_data.append(key, data[key]);
+  }
+
+  axios.post(url, form_data).then(response => {});
+  // // Default options are marked with *
+  // const response = await fetch(url, {
+  //   method: 'POST', // *GET, POST, PUT, DELETE, etc.
+  //   mode: 'cors', // no-cors, *cors, same-origin
+  //   cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+  //   // credentials: 'same-origin', // include, *same-origin, omit
+  //   headers: {
+  //     // 'Content-Type': 'application/json',
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //   },
+  //   redirect: 'follow', // manual, *follow, error
+  //   referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+  //   body: JSON.stringify, // body data type must match "Content-Type" header
+  // });
+  // return response.json(); // parses JSON response into native JavaScript objects
+}
+
 const mapStateToProps = state => {
   const { timepointManager, servers } = state;
   const { timepoints, measurements } = timepointManager;
   const activeServer = servers.servers.find(a => a.active === true);
-  const saveFunction = getSaveFunction(activeServer.type);
+  const saveFunction = getSaveFunction();
   const saveAsFunction = saveTemplate(activeServer.type);
 
   return {
@@ -419,6 +445,46 @@ const mergeProps = (propsFromState, propsFromDispatch, ownProps) => {
     onSaveComplete,
     selectedMeasurementNumber,
     ...propsFromDispatch,
+    onSaveExpertise: (event, data) => {
+      if (data.is_new) {
+        postData('http://10.100.1.41/apipacs/v1/expertise/create', {
+          code_doctor: data.code_doctor,
+          accession_number: data.accession_number,
+          uuid_modality: data.uuid_modality,
+          kd_tindakan: data.kd_tindakan,
+          content: data.expertise.content,
+          user_created: 'admin_expertise',
+          user_updated: 'admin_expertise',
+        });
+      } else {
+        postData('http://10.100.1.41/apipacs/v1/expertise/update', {
+          code_doctor: data.code_doctor,
+          accession_number: data.accession_number,
+          uuid_modality: data.uuid_modality,
+          content: data.expertise.content,
+          kd_tindakan: data.kd_tindakan,
+          user_created: 'admin_expertise',
+          user_updated: 'admin_expertise',
+        });
+      }
+
+      if (data.is_template) {
+        postData('http://10.100.1.41/apipacs/v1/template-expertise/create', {
+          code_doctor: data.code_doctor,
+          kd_tindakan: data.kd_tindakan,
+          name: data.template_name,
+          content: data.expertise.content,
+          user_created: 'admin_expertise',
+          user_updated: 'admin_expertise',
+        });
+      }
+
+      onSaveComplete({
+        title: 'Success',
+        message: 'Berhasil Submit Expertise',
+        type: 'success',
+      });
+    },
     onItemClick: (event, measurementData) => {
       // TODO: Add timepointId to .data for measurementData?
       // TODO: Tooltype should be on the level below? This should

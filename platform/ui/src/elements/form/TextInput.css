@@ -32,3 +32,8 @@
 .input-ohif-container .input-ohif.invisible {
   visibility: hidden;
 }
+
+.disabled-text{
+  background: #3d5368;
+  cursor: not-allowed;
+}

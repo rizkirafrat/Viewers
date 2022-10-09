@@ -6,12 +6,12 @@ window.config = {
     dicomWeb: [
       {
         name: 'dicomweb_server',
-        wadoUriRoot: 'http://localhost:5985',
-        qidoRoot: 'http://localhost:5985',
-        wadoRoot: 'http://localhost:5985',
+        wadoUriRoot: 'http://10.100.1.45:8042',
+        qidoRoot: 'http://10.100.1.45:8042',
+        wadoRoot: 'http://10.100.1.45:8042',
         qidoSupportsIncludeField: false,
-        imageRendering: 'wadouri',
-        thumbnailRendering: 'wadouri',
+        imageRendering: 'wadors',
+        thumbnailRendering: 'wadors',
         enableStudyLazyLoad: true,
       },
     ],

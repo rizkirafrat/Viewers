@@ -1,19 +1,22 @@
 {
-  "Name": "Orthanc inside Docker",
-  "StorageDirectory": "/var/lib/orthanc/db",
-  "IndexDirectory": "/var/lib/orthanc/db",
-  "StorageCompression": false,
+  "Name": "medipacs",
+  "StorageDirectory": "/var/lib/medipacs/db",
+  "IndexDirectory": "/var/lib/medipacs/db",
+  "StorageCompression": true,
   "MaximumStorageSize": 0,
   "MaximumPatientCount": 0,
   "LuaScripts": [],
-  "Plugins": ["/usr/share/orthanc/plugins", "/usr/local/share/orthanc/plugins"],
+  "Plugins": [
+    "/usr/share/medipacs/plugins",
+    "/usr/local/share/medipacs/plugins"
+  ],
   "ConcurrentJobs": 2,
   "HttpServerEnabled": true,
   "HttpPort": 8042,
   "HttpDescribeErrors": true,
   "HttpCompressionEnabled": true,
   "DicomServerEnabled": true,
-  "DicomAet": "ORTHANC",
+  "DicomAet": "MEDIPACSMLW",
   "DicomCheckCalledAet": false,
   "DicomPort": 4242,
   "DefaultEncoding": "Latin1",
@@ -26,7 +29,6 @@
   "RleTransferSyntaxAccepted": true,
   "UnknownSopClassAccepted": false,
   "DicomScpTimeout": 30,
-
   "RemoteAccessAllowed": true,
   "SslEnabled": false,
   "SslCertificate": "certificate.pem",
@@ -35,7 +37,7 @@
     "test": "test"
   },
   "DicomModalities": {},
-  "DicomModalitiesInDatabase": false,
+  "DicomModalitiesInDatabase": true,
   "DicomAlwaysAllowEcho": true,
   "DicomAlwaysAllowStore": true,
   "DicomCheckModalityHost": false,
@@ -43,9 +45,7 @@
   "OrthancPeers": {},
   "OrthancPeersInDatabase": false,
   "HttpProxy": "",
-
   "HttpVerbose": true,
-
   "HttpTimeout": 10,
   "HttpsVerifyPeers": true,
   "HttpsCACertificates": "",
@@ -74,16 +74,31 @@
   "MediaArchiveSize": 1,
   "StorageAccessOnFind": "Always",
   "MetricsEnabled": true,
-
   "DicomWeb": {
     "Enable": true,
     "Root": "/dicom-web/",
     "EnableWado": true,
     "WadoRoot": "/wado",
-    "Host": "127.0.0.1",
+    "Host": "10.100.1.45",
     "Ssl": false,
     "StowMaxInstances": 10,
     "StowMaxSize": 10,
     "QidoCaseSensitive": false
+  },
+  "PostgreSQL": {
+    // Enable the use of PostgreSQL to store the Orthanc index?
+    "EnableIndex": true,
+    // Enable the use of PostgreSQL to store the DICOM files?
+    "EnableStorage": true,
+    // Option 1: Specify explicit authentication parameters
+    "Host": "postgres",
+    "Port": 4432,
+    "Database": "medipacs_dicom",
+    "Username": "root",
+    "Password": "k4r4w4ng",
+    // Option 2: Authenticate using PostgreSQL connection URI
+    // "ConnectionUri" : "postgresql://orthanc_user:my_password@localhost:5432/orthanc_db",
+    // Optional: Disable the locking of the PostgreSQL database
+    "Lock": false
   }
 }
